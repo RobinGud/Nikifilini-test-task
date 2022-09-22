@@ -21,4 +21,4 @@ const { join } = require('path')
   controllers: [AppController],
   providers: [AppService, RetailService],
 })
-export class AppModule {}
+export class AppModule { }
