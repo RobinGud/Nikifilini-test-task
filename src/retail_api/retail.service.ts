@@ -13,7 +13,7 @@ export class RetailService {
     this.axios = axios.create({
       baseURL: `${process.env.RETAIL_URL}/api/v5`,
       timeout: 10000,
-      headers: { },
+      headers: {},
     })
 
     this.axios.interceptors.request.use((config) => {
@@ -45,18 +45,18 @@ export class RetailService {
   }
 
   async findOrder(id: string): Promise<Order | null> {
-
+    return null
   }
 
   async orderStatuses(): Promise<CrmType[]> {
-
+    return []
   }
 
   async productStatuses(): Promise<CrmType[]> {
-
+    return []
   }
 
   async deliveryTypes(): Promise<CrmType[]> {
-
+    return []
   }
 }
