@@ -43,29 +43,33 @@ export class RetailService {
 
     const orders = plainToClass(Order, resp.data.orders as Array<any>)
     const pagination: RetailPagination = resp.data.pagination
-    // console.log(orders[1])
+
     return [orders, pagination]
   }
 
   async findOrder(id: string): Promise<Order | null> {
-    const params = serialize({ filter: { ids: [id] } }, '')
+    const filter: OrdersFilter = {
+      filter: {
+        numbers: [id],
+      },
+    }
+    const params = serialize(filter, '')
     const resp = await this.axios.get('/orders?' + params)
 
     if (!resp.data) throw new Error('RETAIL CRM ERROR')
+    if (resp.data.orders.length === 0) return null
 
-    const order = plainToClass(Order, resp.data.orders as Array<any>)
-    // console.log(order)
-    return null
+    const order = plainToClass(Order, resp.data.orders[0] as any)
+    return order
   }
 
   async orderStatuses(): Promise<CrmType[]> {
-    const resp = await this.axios.get('/orders/statuses')
+    const resp = await this.axios.get('/reference/statuses')
 
     if (!resp.data) throw new Error('RETAIL CRM ERROR')
 
-    console.log(resp.data)
-    const orderStatuses = plainToClass(CrmType, resp.data.orders as Array<any>)
-    return []
+    const orderStatuses = plainToClass(CrmType, Object.values(resp.data.statuses) as Array<any>)
+    return orderStatuses
   }
 
   async productStatuses(): Promise<CrmType[]> {
@@ -73,9 +77,8 @@ export class RetailService {
 
     if (!resp.data) throw new Error('RETAIL CRM ERROR')
 
-    console.log(resp.data)
-    const productStatuses = plainToClass(CrmType, resp.data.orders as Array<any>)
-    return []
+    const productStatuses = plainToClass(CrmType, Object.values(resp.data.productStatuses) as Array<any>)
+    return productStatuses
   }
 
   async deliveryTypes(): Promise<CrmType[]> {
@@ -83,8 +86,7 @@ export class RetailService {
 
     if (!resp.data) throw new Error('RETAIL CRM ERROR')
 
-    console.log(resp.data)
-    const productStatuses = plainToClass(CrmType, resp.data.orders as Array<any>)
-    return []
+    const deliveryTypes = plainToClass(CrmType, Object.values(resp.data.deliveryTypes) as Array<any>)
+    return deliveryTypes
   }
 }

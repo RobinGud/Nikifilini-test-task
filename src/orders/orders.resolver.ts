@@ -13,29 +13,11 @@ export class OrdersResolver {
 
   @Query()
   async getOrders(@Args('page') page: number) {
-    console.log(page)
-    const dummyData: OrdersResponse = {
-      orders: [{
-        number: 'String!',
-        id: 1,
-        site: 'String',
-        createdAt: 'String',
-        status: 'String',
-        items: [{
-          id: 12,
-          status: 'String',
-          quantity: 1,
-          comment: 'String'
-        }]
-      }],
-      pagination: {
-        limit: 12,
-        totalCount: 12,
-        currentPage: 12,
-        totalPageCount: 12,
-      }
+    const data = await this.retailService.orders({ page })
+    const response: OrdersResponse = {
+      orders: data[0],
+      pagination: data[1]
     }
-    const orders = await this.retailService.orders({ page })
-    return dummyData
+    return response
   }
 }
